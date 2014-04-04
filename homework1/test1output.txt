@@ -1,0 +1,6 @@
+Code run by Francis Wang
+Environment variable UWHPSC is /home/francis/projects/uwhpsc
+Environment variable MYHPSC is /home/francis/projects/scicomp-002
+Imported numpy ok
+Imported matplotlib ok
+Imported pylab ok

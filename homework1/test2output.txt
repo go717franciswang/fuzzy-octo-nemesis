@@ -1,0 +1,24 @@
+
+Code run by Francis Wang
+Environment variable UWHPSC is /home/francis/projects/uwhpsc
+Environment variable MYHPSC is /home/francis/projects/scicomp-002
+
+which ipython returns...
+/usr/bin/ipython
+
+which gfortran returns...
+/usr/bin/gfortran
+
+gfortran --version returns...
+GNU Fortran (Ubuntu/Linaro 4.8.1-10ubuntu9) 4.8.1
+Copyright (C) 2013 Free Software Foundation, Inc.
+
+GNU Fortran comes with NO WARRANTY, to the extent permitted by law.
+You may redistribute copies of GNU Fortran
+under the terms of the GNU General Public License.
+For more information about these matters, see the file named COPYING
+
+
+Compiling and running a Fortran code...
+ Code run by Francis Wang
+ Successfully ran Fortran 90 program
