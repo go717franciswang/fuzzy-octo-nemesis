@@ -36,6 +36,18 @@ def quad_interp(xi,yi):
 
     return c
 
+def plot_quad(xi, yi):
+    c = quad_interp(xi, yi)
+    x = np.linspace(xi.min() - 1, xi.max() + 1, 1000)
+    y = c[0] + c[1]*x + c[2]*x**2
+
+    plt.figure(1)
+    plt.clf()
+    plt.plot(x, y, 'b-')
+
+    plt.plot(xi, yi, 'ro')
+    # plt.ylim(y.min() - 1, y.max() + 1)
+    plt.savefig('quadratic.png')
 
 def test_quad1():
     """
@@ -50,7 +62,19 @@ def test_quad1():
     # test that all elements have small error:
     assert np.allclose(c, c_true), \
         "Incorrect result, c = %s, Expected: c = %s" % (c,c_true)
+
+def test_quad2():
+    xi = np.array([-1.,  0.,  2.])
+    yi = np.array([ 1., -1.,  7.])
+
+    import os
+    f = 'quadratic.png'
+    if os.path.isfile(f):
+        os.remove(f)
+    plot_quad(xi,yi)
         
+    assert os.path.isfile(f)
+
 if __name__=="__main__":
     # "main program"
     # the code below is executed only if the module is executed at the command line,
@@ -60,4 +84,5 @@ if __name__=="__main__":
     # not if the module is imported.
     print "Running test..."
     test_quad1()
+    test_quad2()
 
