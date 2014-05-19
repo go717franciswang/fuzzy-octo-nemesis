@@ -25,6 +25,8 @@ real(kind=8) function trapezoid(f, a, b, n)
 end function trapezoid
 
 subroutine error_table(f, a, b, nvals, int_true)
+    implicit none
+
     real(kind=8), external :: f
     real(kind=8), intent(in) :: a, b, int_true
     integer, dimension(:), intent(in) :: nvals
