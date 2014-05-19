@@ -5,23 +5,29 @@ contains
 real(kind=8) function trapezoid(f, a, b, n)
     implicit none
 
+    integer :: thread_num
+
     real(kind=8), external :: f
     real(kind=8), intent(in) :: a, b
     integer, intent(in) :: n
 
     real(kind=8) :: y0, y1, h, x
     integer :: i
+    real(kind=8), dimension(n) :: fj
 
     h = (b-a) / (n-1)
-    trapezoid = 0.
     x = a
-    y0 = f(x)
     do i=1,n
+        fj(i) = f(x)
         x = x + h
-        y1 = f(x)
-        trapezoid = trapezoid + (y1+y0)*h/2
-        y0 = y1
     end do
+
+    trapezoid = 0.
+    do i=1,n
+        trapezoid = trapezoid + fj(i)
+    end do
+
+    trapezoid = trapezoid*h - 0.5*h*(fj(1) + fj(size(fj)))
 end function trapezoid
 
 subroutine error_table(f, a, b, nvals, int_true)

@@ -1,9 +1,9 @@
 module quadrature_omp
-use omp_lib
 
 contains
 
 real(kind=8) function trapezoid(f, a, b, n)
+    use omp_lib
     implicit none
 
     integer :: thread_num
@@ -24,7 +24,7 @@ real(kind=8) function trapezoid(f, a, b, n)
     end do
 
     trapezoid = 0.
-    !$omp parallel do
+    !$omp parallel do reduction(+:trapezoid)
     do i=1,n
         trapezoid = trapezoid + fj(i)
     end do

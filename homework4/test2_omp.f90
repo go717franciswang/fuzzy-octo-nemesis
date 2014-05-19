@@ -1,6 +1,7 @@
 program test2_omp
 
     use quadrature_omp, only: trapezoid, error_table
+    use omp_lib
 
     implicit none
     real(kind=8) :: a,b,int_true
