@@ -10,6 +10,10 @@ test1: test1.exe
 test2: test2.exe
 	./test2.exe
 
+test2_omp: quadrature_omp.f90 test2_omp.f90
+	gfortran -fopenmp quadrature_omp.f90 test2_omp.f90 -o test2_omp.exe
+	./test2_omp.exe
+
 test1.exe: $(MODULES) $(OBJECTS)
 	gfortran $(FFLAGS) $(OBJECTS) -o test1.exe
 
