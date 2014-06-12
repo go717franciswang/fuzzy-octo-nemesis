@@ -1,5 +1,5 @@
 
-module quadrature
+module quadrature3
 
     use omp_lib
 
@@ -30,7 +30,7 @@ real(kind=8) function trapezoid(f, a, b, n)
     h = (b-a)/(n-1)
     trap_sum = 0.5d0*(f(a) + f(b))  ! endpoint contributions
     
-    !$omp parallel do private(xj) reduction(+ : trap_sum) 
+    !!$omp parallel do private(xj) reduction(+ : trap_sum) 
     do j=2,n-1
         xj = a + (j-1)*h
         trap_sum = trap_sum + f(xj)
@@ -39,6 +39,31 @@ real(kind=8) function trapezoid(f, a, b, n)
     trapezoid = h * trap_sum
 
 end function trapezoid
+
+real(kind=8) function simpson(f, a, b, n)
+    implicit none
+    real(kind=8), intent(in) :: a, b
+    real(kind=8), external :: f
+    integer, intent(in) :: n
+
+    integer :: i
+    real(kind=8) :: h
+
+    h = (b-a) / n
+    simpson = f(a) + f(b)
+
+    !$omp parallel do reduction(+ : simpson)
+    do i=1, n-1, 2
+        simpson = simpson + 4 * f(a+i*h)
+        enddo
+
+    !$omp parallel do reduction(+ : simpson)
+    do i=2, n-2, 2
+        simpson = simpson + 2 * f(a+i*h)
+        enddo
+
+    simpson = simpson*h/3
+end function simpson
 
 
 subroutine error_table(f,a,b,nvals,int_true,method)
@@ -58,7 +83,10 @@ subroutine error_table(f,a,b,nvals,int_true,method)
 
     print *, "      n         approximation        error       ratio"
     last_error = 0.d0   
-    do j=1,size(nvals)
+
+    !$omp parallel do private(n,int_approx,error,ratio), firstprivate(last_error) &
+    !$omp          schedule(dynamic)
+    do j=size(nvals),1,-1
         n = nvals(j)
         int_approx = method(f,a,b,n)
         error = abs(int_approx - int_true)
@@ -72,5 +100,5 @@ subroutine error_table(f,a,b,nvals,int_true,method)
 end subroutine error_table
 
 
-end module quadrature
+end module quadrature3
 
