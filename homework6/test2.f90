@@ -1,5 +1,5 @@
 
-program test
+program test2
 
     use mpi
 
@@ -7,7 +7,7 @@ program test
     use functions, only: f, fevals_proc, k
 
     implicit none
-    real(kind=8) :: a,b,int_true, int_approx
+    real(kind=8) :: a,b,int_true, int_approx, h, int_approx_total
 
     integer :: proc_num, num_procs, ierr, n, fevals_total
     integer, dimension(MPI_STATUS_SIZE) :: status
@@ -36,9 +36,8 @@ program test
 
     ! Note: In this version all processes call trap and repeat the
     !       same work, so each should get the same answer.  
-    int_approx = trapezoid(f,a,b,n)
-    print '("Process ",i3," with n = ",i8," computes int_approx = ",es22.14)', &
-            proc_num,n, int_approx
+    h = (b-a)/num_procs
+    int_approx = trapezoid(f,a+h*proc_num,a+h*(proc_num+1),n/num_procs)
 
     call MPI_BARRIER(MPI_COMM_WORLD,ierr) ! wait for all process to print
 
@@ -48,12 +47,14 @@ program test
     call MPI_BARRIER(MPI_COMM_WORLD,ierr) ! wait for all process to print
     call MPI_REDUCE(fevals_proc, fevals_total, 1, MPI_INTEGER, MPI_SUM, 0, &
                     MPI_COMM_WORLD, ierr)
+    call MPI_REDUCE(int_approx, int_approx_total, 1, MPI_DOUBLE_PRECISION, MPI_SUM, 0, &
+                    MPI_COMM_WORLD, ierr)
 
     if (proc_num==0) then
-        ! This is wrong -- part of homework is to fix this:
         print '("Total number of fevals: ",i10)', fevals_total
+        print '("int_approx = ",es22.14)', int_approx_total
         endif
 
     call MPI_FINALIZE(ierr)
 
-end program test
+end program test2
