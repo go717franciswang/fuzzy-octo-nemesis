@@ -1,11 +1,12 @@
 
 module quadrature_mc
+implicit none
 
 contains
 
 function quad_mc(g, a, b, ndim, npoints)
-
     implicit none
+
     real(kind=8) :: quad_mc
     real(kind=8), external :: g
     integer, intent(in) :: ndim, npoints
