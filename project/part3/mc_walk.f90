@@ -1,11 +1,10 @@
 module mc_walk
     use problem_description, only: ax, bx, ay, by, uboundary, nx, ny, dx, dy
+    implicit none
 
 contains
 
 subroutine random_walk(i0, j0, max_steps, ub, iabort)
-    implicit none
-
     integer, intent(in) :: i0, j0, max_steps
     real(kind=8), intent(out) :: ub
     integer, integer(out) :: iabort
@@ -41,5 +40,26 @@ subroutine random_walk(i0, j0, max_steps, ub, iabort)
         endif
     enddo
 endsubroutine
+
+subroutine many_walks(i0, j0, max_steps, n_mc, u_mc, n_success)
+    integer, intent(in) :: i0, j0, max_steps, n_mc
+    real(kind=8), intent(out) :: u_mc
+    integer, intent(out) :: n_success
+
+    integer :: k, i, j
+    real(kind=8) ;; ub, ub_sum
+
+    n_success = 0
+
+    do k=1,n_mc
+        random_walk(i0, j0, max_steps, ub, iabort)
+        if iabort == 0 then
+            ub_sum = ub_sum + ub
+            n_success = n_success + 1
+        endif
+    enddo
+
+    u_mc = ub_sum / n_success
+endsubroutine many_walks
 
 endmodule mc_walk
