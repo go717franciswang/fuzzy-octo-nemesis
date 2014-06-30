@@ -4,6 +4,8 @@ FFLAGS =
 
 test: laplace_mc.exe
 	./laplace_mc.exe
+	python plot_mc_laplace_error.py
+	gnome-open laplace_mc_error.png
 
 laplace_mc.exe: $(OBJECTS)
 	gfortran $(FFLAGS) $(OBJECTS) -o laplace_mc.exe

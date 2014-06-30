@@ -32,6 +32,7 @@ import time, sys
 #   False ==> Many more walks taken to investigate convergence.
 
 plot_walk = True
+plot_walk = False
 
 
 # problem description:
@@ -258,6 +259,8 @@ if __name__ == "__main__":
     u_mc_total = u_mc
     n_total = n_success
 
+    open(unit=25, file='laplace_mc_error.txt', status='unknown')
+
     for i in range(12):
         u_sum_old = u_mc_total * n_total
         u_mc, n_success = many_walks(i0, j0, max_steps, n_mc)
@@ -268,6 +271,8 @@ if __name__ == "__main__":
 
         print "After %8i random walks, u = %15.9f, rel. error = %15.6e" \
                 % (n_total, u_mc_total, error)
+        write(25, 11) n_total, u_mc_total, error
+11      format (i10,e23.15,e15.6)
         n_mc = 2*n_mc   # double number of trials for next iteration
         
         

@@ -33,6 +33,8 @@ program laplace_mc
     u_mc_total = u_mc
     n_total = n_success
 
+    open(unit=25, file='laplace_mc_error.txt', status='unknown')
+
     do i = 1,12
         u_sum_old = u_mc_total * n_total
         call many_walks(i0, j0, maxsteps, n_mc, u_mc, n_success)
@@ -43,6 +45,9 @@ program laplace_mc
 
         print '("After ",i8," random walks, u = ",es15.9,", ref. error = ",es15.6)', &
             n_total, u_mc_total, error
+        write(25, *) n_total, u_mc_total, error
+!11      format (i10,e23.15,e15.6)
+
         n_mc = 2*n_mc
     enddo
 
